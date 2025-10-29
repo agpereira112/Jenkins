@@ -14,16 +14,30 @@ node {
         }
 
         stage('Restaurar Dependências (.NET)') {
-            bat 'dotnet --info'
-            bat 'dotnet restore'
+            dir('MeuApp') {
+                bat 'dotnet --info'
+                bat 'dotnet restore MeuApp.csproj'
+            }
+
+            dir('MeuApp_Tests') {
+                bat 'dotnet restore MeuApp_Tests.csproj'
+            }
         }
 
         stage('Compilar (.NET)') {
-            bat 'dotnet build --configuration Release --no-restore'
+            dir('MeuApp') {
+                bat 'dotnet build MeuApp.csproj --configuration Release --no-restore'
+            }
+
+            dir('MeuApp_Tests') {
+                bat 'dotnet build MeuApp_Tests.csproj --configuration Release --no-restore'
+            }
         }
 
         stage('Executar Testes (.NET)') {
-            bat 'dotnet test --no-build --verbosity minimal'
+            dir('MeuApp_Tests') {
+                bat 'dotnet test MeuApp_Tests.csproj --no-build --verbosity minimal'
+            }
         }
 
         stage('Sucesso') {
