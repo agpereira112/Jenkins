@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MeuApp\MeuApp.csproj" />
+		<PackageReference Include="xunit" Version="2.6.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.6.0" />
+	</ItemGroup>
+</Project>
