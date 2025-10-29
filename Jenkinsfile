@@ -1,4 +1,4 @@
-﻿node {
+node {
     def repoUrl = 'https://github.com/agpereira112/Jenkins.git'
 
     try {
