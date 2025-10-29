@@ -1,38 +1,40 @@
-﻿pipeline {
-    agent any
+﻿node {
+    def repoUrl = 'https://github.com/agpereira112/Jenkins.git'
 
-    stages {
-        stage('Clonar Repositório') {
-            steps {
-                git branch: 'main', url: 'https://github.com/agpereira112/Jenkins.git'
-            }
+    try {
+        stage('Preparar Workspace') {
+            deleteDir() 
         }
 
-        stage('Restaurar Dependências') {
-            steps {
-                bat 'dotnet restore'
-            }
+        stage('Checkout') {
+            checkout([$class: 'GitSCM',
+                      branches: [[name: '*/main']],
+                      userRemoteConfigs: [[url: repoUrl]]
+            ])
         }
 
-        stage('Compilar Projeto') {
-            steps {
-                bat 'dotnet build --no-restore'
-            }
+        stage('Restaurar Dependências (.NET)') {
+            bat 'dotnet --info'
+            bat 'dotnet restore'
         }
 
-        stage('Executar Testes Automatizados') {
-            steps {
-                bat 'dotnet test --no-build --verbosity normal'
-            }
+        stage('Compilar (.NET)') {
+            bat 'dotnet build --configuration Release --no-restore'
         }
-    }
 
-    post {
-        success {
-            echo "✅ Build e testes executados com sucesso!"
+        stage('Executar Testes (.NET)') {
+            bat 'dotnet test --no-build --verbosity minimal'
         }
-        failure {
-            echo "❌ Falha na execução dos testes ou build."
+
+        stage('Sucesso') {
+            echo "✅ Build e testes concluídos com sucesso."
         }
+
+    } catch (err) {
+        echo "❌ Pipeline falhou: ${err}"
+        currentBuild.result = 'FAILURE'
+        throw err
+    } finally {
+        echo "Pipeline finalizado. Workspace: ${env.WORKSPACE}"
     }
 }
