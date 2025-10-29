@@ -20,7 +20,7 @@ node {
             }
 
             dir('MeuApp_Tests') {
-                bat 'dotnet restore MeuApp_Tests.csproj'
+                bat 'dotnet restore MeuApp_Tests.csproj --force'
             }
         }
 
