@@ -36,7 +36,7 @@ node {
 
         stage('Executar Testes (.NET)') {
             dir('MeuApp_Tests') {
-                bat 'dotnet test MeuApp_Tests.csproj --no-build --verbosity minimal'
+                bat 'dotnet test MeuApp_Tests.csproj --verbosity minimal'
             }
         }
 
